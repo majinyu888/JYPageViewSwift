@@ -4,7 +4,7 @@ pages_Controller swift
 # How To Use
 pod "JYPageViewSwift"
 
-    ```
+    
     let titles = [
             "测试分类01",
             "测试分类02",
@@ -37,12 +37,12 @@ pod "JYPageViewSwift"
         
         
 
-extension UIColor {
-    public static func randomColor() -> UIColor {
-        let r = CGFloat(arc4random()%255)
-        let g = CGFloat(arc4random()%255)
-        let b = CGFloat(arc4random()%255)
-        return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1.0)
+    extension UIColor {
+        public static func randomColor() -> UIColor {
+             let r = CGFloat(arc4random()%255)
+             let g = CGFloat(arc4random()%255)
+             let b = CGFloat(arc4random()%255)
+             return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: 1.0)
+         }
     }
-}
-```
+
