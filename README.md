@@ -4,7 +4,7 @@ pages_Controller swift
 # How To Use
 pod "JYPageViewSwift"
 
-    
+# Code
     let titles = [
             "测试分类01",
             "测试分类02",
