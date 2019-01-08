@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
         一个简单的Controller管理容器,可以左右滑动, JYPageViewSwift For Paged Controller
                    DESC
 
-  s.homepage     = "https://github.com/majinyu888/JYPageView_Swift"
+  s.homepage     = "https://github.com/majinyu888/JYPageViewSwift"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -94,7 +94,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "JYPageView", "JYPageViewSwift/JYPageView/**/*.{swift}"
+  s.source_files  = "JYPageViewSwift", "JYPageViewSwift/JYPageViewSwift/JYPageView/*.{swift}"
  # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
