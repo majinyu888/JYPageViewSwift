@@ -1,2 +1,2 @@
-# JYPageViewSwift
-滑动的Controller管理容器
+# JYPageView_Swift
+pages_Controller swift
