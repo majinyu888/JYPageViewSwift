@@ -47,6 +47,17 @@ class ViewController: UIViewController {
             "imageName1"
         ]
         
+        let imageSelectedInfos = [
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3963687749,4116464709&fm=26&gp=0.jpg",
+        ]
+        
         var childs = [UIViewController]()
         for _ in 0..<titles.count {
             let child = UIViewController()
@@ -66,7 +77,7 @@ class ViewController: UIViewController {
         style.image_view_width = 40
         style.is_hidden_when_only_one_item = true
         
-        pageView = JYPageView(rect, style: style, titles: titles, imageInfos: imageInfos, parent: self, childs: childs)
+        pageView = JYPageView(rect, style: style, titles: titles, imageInfos: imageInfos, imageSelectedInfos: imageSelectedInfos,  parent: self, childs: childs)
         pageView.delegate = self
         view.addSubview(pageView)
     }

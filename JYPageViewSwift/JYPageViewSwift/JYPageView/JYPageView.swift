@@ -29,6 +29,8 @@ class JYPageView: UIView {
     //MARK: - private models
     fileprivate var titles = [String]()
     fileprivate var imageInfos: [String]? = [String]()
+    fileprivate var imageSelectedInfos: [String]? = [String]()
+
     fileprivate weak var parent: UIViewController!
     fileprivate var childs = [UIViewController]()
     
@@ -40,15 +42,16 @@ class JYPageView: UIView {
     
     //MARK: - init
     
-    convenience init(_ frame: CGRect, style: JYPageTitleViewStyle?, titles: [String], imageInfos: [String]?, parent: UIViewController, childs: [UIViewController]) {
+    convenience init(_ frame: CGRect, style: JYPageTitleViewStyle?, titles: [String], imageInfos: [String]?, imageSelectedInfos: [String]?, parent: UIViewController, childs: [UIViewController]) {
         self.init(frame: frame)
         backgroundColor = UIColor.white
         self.titles = titles
         self.imageInfos = imageInfos
+        self.imageSelectedInfos = imageSelectedInfos
         self.childs = childs
         self.parent = parent
         self.style = style == nil ? JYPageTitleViewStyle() : style!
-        self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, style: self.style)
+        self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos,imageSelectedInfos: self.imageSelectedInfos, style: self.style)
         
         var rect_title = CGRect.zero
         var rect_content = CGRect.zero
@@ -102,7 +105,7 @@ class JYPageView: UIView {
                 
                 self.titles = titles
                 self.childs = childs
-                self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, style: self.style)
+                self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, imageSelectedInfos: self.imageSelectedInfos, style: self.style)
                 
                 var rect_title = CGRect.zero
                 var rect_content = CGRect.zero

@@ -24,6 +24,7 @@ class JYPageTitleView: UIView {
     
     fileprivate var titles = [String]()
     fileprivate var title_imageInfos: [String]? = [String]()
+    fileprivate var title_selected_imageInfos: [String]? = [String]()
     fileprivate var title_views = [UIView]()  // of lables
     fileprivate var image_views = [UIImageView]() // of imageViews
     fileprivate var style: JYPageTitleViewStyle!
@@ -43,7 +44,7 @@ class JYPageTitleView: UIView {
     /// - Parameters:
     ///   - titles: 标题数组
     ///   - style: 标题样式
-    convenience init(_ titles: [String], imageInfos: [String]?, style: JYPageTitleViewStyle?) {
+    convenience init(_ titles: [String], imageInfos: [String]?, imageSelectedInfos: [String]?, style: JYPageTitleViewStyle?) {
         self.init(frame: .zero)
         
         if style == nil  {
@@ -70,6 +71,7 @@ class JYPageTitleView: UIView {
                             height: self.style.title_view_height)
         
         self.title_imageInfos = imageInfos
+        self.title_selected_imageInfos = imageSelectedInfos
         
         /// contentView
         content_view.frame = CGRect(x: 0.0,
@@ -122,7 +124,7 @@ class JYPageTitleView: UIView {
                 imageView.tag = i
                 imageView.frame = CGRect(x: offset_x, y: (self.style.title_view_height - self.style.image_view_height) / 2, width: self.style.image_view_width, height: self.style.image_view_height)
                 /// 添加手势
-                    imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.titleTaped(_:))))
+                imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.titleTaped(_:))))
                 if imageName.hasPrefix("http") {
                     /// 网络图片
                     if let url = URL(string: imageName) {
@@ -140,6 +142,8 @@ class JYPageTitleView: UIView {
                 content_view.addSubview(imageView)
                 offset_x += self.style.image_view_width + self.style.image_right_margin
             }
+            /// 默认为0
+            updateImageViewWithTargetIndex(0)
             
             /// --- label
             label.frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
@@ -221,6 +225,9 @@ class JYPageTitleView: UIView {
         let target_label = title_views[targetIndex] as! UILabel
         source_lable.textColor = style.default_color
         target_label.textColor = style.selected_color
+        
+        updateImageViewWithTargetIndex(targetIndex)
+        
         current_index = targetIndex
         
         // 让选中的标题位于中间
@@ -274,6 +281,49 @@ class JYPageTitleView: UIView {
                                               y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
                                               width: self.current_title_view.frame.size.width,
                                               height: self.style.flag_view_height)
+            }
+        }
+    }
+    
+    /// 更新图片的选中和未选中状态
+    /// - Parameter index: 目标index
+    private func updateImageViewWithTargetIndex(_ index: Int) {
+        if let imageInfos = title_imageInfos, let imageSelectedInfos = title_selected_imageInfos, imageInfos.count > 0, imageSelectedInfos.count > 0, imageInfos.count == imageSelectedInfos.count {
+            
+            let imageView_current = image_views[current_index]
+            let imageName_current = imageInfos[current_index]
+            
+            let imageView_target = image_views[index]
+            let imageName_target = imageSelectedInfos[index]
+            
+            
+            if imageName_current.hasPrefix("http") {
+                /// 网络图片
+                if let url = URL(string: imageName_current) {
+                    DispatchQueue.main.async {
+                        if let data = try? Data(contentsOf: url) {
+                            imageView_current.image = UIImage(data: data)
+                        }
+                    }
+                }
+            } else {
+                /// 默认为本地图片
+                imageView_current.image = UIImage(named: imageName_current)
+            }
+            
+            
+            if imageName_target.hasPrefix("http") {
+                /// 网络图片
+                if let url = URL(string: imageName_target) {
+                    DispatchQueue.main.async {
+                        if let data = try? Data(contentsOf: url) {
+                            imageView_target.image = UIImage(data: data)
+                        }
+                    }
+                }
+            } else {
+                /// 默认为本地图片
+                imageView_target.image = UIImage(named: imageName_target)
             }
         }
     }
