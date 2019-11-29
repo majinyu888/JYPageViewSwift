@@ -85,7 +85,7 @@ class JYPageView: UIView {
     //MARK: - private functions
     
     //MARK: - public functions
-    public func reload(with titles: [String], imageInfos: [String]?, childs: [UIViewController]) {
+    public func reload(with titles: [String], imageInfos: [String]?, imageSelectedInfos: [String]?, childs: [UIViewController]) {
         /// 1.清空
         /// 2.恢复默认值
         /// 3.重新添加
@@ -104,6 +104,8 @@ class JYPageView: UIView {
                 self.current_index = 0
                 
                 self.titles = titles
+                self.imageInfos = imageInfos
+                self.imageSelectedInfos = imageSelectedInfos
                 self.childs = childs
                 self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, imageSelectedInfos: self.imageSelectedInfos, style: self.style)
                 

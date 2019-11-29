@@ -92,6 +92,20 @@ class ViewController: UIViewController {
             "测试分类01",
             "测试分类01"
         ]
+        
+        let imageInfos = [
+            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
+            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
+            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
+            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg"
+        ]
+        
+        let imageSelectedInfos = [
+            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
+            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
+            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
+            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg"
+        ]
         var childs = [UIViewController]()
         
         for _ in 0..<titles.count {
@@ -99,7 +113,7 @@ class ViewController: UIViewController {
             child.view.backgroundColor = UIColor.randomColor()
             childs.append(child)
         }
-        pageView.reload(with: titles, imageInfos: nil, childs: childs)
+        pageView.reload(with: titles, imageInfos: imageInfos, imageSelectedInfos: imageSelectedInfos, childs: childs)
     }
 }
 
