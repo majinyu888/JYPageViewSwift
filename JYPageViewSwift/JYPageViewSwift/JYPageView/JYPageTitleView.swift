@@ -23,7 +23,9 @@ class JYPageTitleView: UIView {
     //MARK: - Private Models
     
     fileprivate var titles = [String]()
-    fileprivate var title_views = [UIView]()
+    fileprivate var title_imageInfos: [String]? = [String]()
+    fileprivate var title_views = [UIView]()  // of lables
+    fileprivate var image_views = [UIImageView]() // of imageViews
     fileprivate var style: JYPageTitleViewStyle!
     fileprivate var current_index: Int = 0
     fileprivate var current_title_view: UILabel {
@@ -41,7 +43,7 @@ class JYPageTitleView: UIView {
     /// - Parameters:
     ///   - titles: 标题数组
     ///   - style: 标题样式
-    convenience init(_ titles: [String], style: JYPageTitleViewStyle?) {
+    convenience init(_ titles: [String], imageInfos: [String]?, style: JYPageTitleViewStyle?) {
         self.init(frame: .zero)
         
         if style == nil  {
@@ -66,6 +68,8 @@ class JYPageTitleView: UIView {
                             y: 0.0,
                             width: self.style!.title_view_width,
                             height: self.style.title_view_height)
+        
+        self.title_imageInfos = imageInfos
         
         /// contentView
         content_view.frame = CGRect(x: 0.0,
@@ -109,7 +113,35 @@ class JYPageTitleView: UIView {
                                                                     attributes: [NSAttributedString.Key.font: label.font ?? UIFont.systemFont(ofSize: 15)],
                                                                     context: nil)
             title_width = title_rect.size.width
-            /// 最终的frame
+            
+            /// --- 图片
+            if let imageInfos = self.title_imageInfos, imageInfos.count > 0, imageInfos.count == titles.count {
+                let imageName = imageInfos[i]
+                let imageView = UIImageView(frame: .zero)
+                imageView.isUserInteractionEnabled = true
+                imageView.tag = i
+                imageView.frame = CGRect(x: offset_x, y: (self.style.title_view_height - self.style.image_view_height) / 2, width: self.style.image_view_width, height: self.style.image_view_height)
+                /// 添加手势
+                    imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.titleTaped(_:))))
+                if imageName.hasPrefix("http") {
+                    /// 网络图片
+                    if let url = URL(string: imageName) {
+                        DispatchQueue.main.async {
+                            if let data = try? Data(contentsOf: url) {
+                                imageView.image = UIImage(data: data)
+                            }
+                        }
+                    }
+                } else {
+                    /// 默认为本地图片
+                    imageView.image = UIImage(named: imageName)
+                }
+                image_views.append(imageView)
+                content_view.addSubview(imageView)
+                offset_x += self.style.image_view_width + self.style.image_right_margin
+            }
+            
+            /// --- label
             label.frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
             /// 添加手势
             label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.titleTaped(_:))))
@@ -139,10 +171,18 @@ class JYPageTitleView: UIView {
         
         /// flagView Default
         flag_view.backgroundColor = self.style.selected_color
-        flag_view.frame = CGRect(x: current_title_view.frame.origin.x,
-                                 y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
-                                 width: current_title_view.frame.size.width,
-                                 height: self.style.flag_view_height)
+        if let imageInfos = self.title_imageInfos, imageInfos.count > 0, imageInfos.count == titles.count {
+            flag_view.frame = CGRect(x: current_title_view.frame.origin.x - self.style.image_view_width - self.style.image_right_margin,
+                                     y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
+                                     width: current_title_view.frame.size.width + self.style.image_view_width + self.style.image_right_margin,
+                                     height: self.style.flag_view_height)
+        } else {
+            flag_view.frame = CGRect(x: current_title_view.frame.origin.x,
+                                     y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
+                                     width: current_title_view.frame.size.width,
+                                     height: self.style.flag_view_height)
+        }
+        
         content_view.addSubview(flag_view)
         
         /// 最后一个titleLabel的最大 X + 0.5倍边距
@@ -210,6 +250,11 @@ class JYPageTitleView: UIView {
             if target_x + width > content_size.width {
                 target_x = content_size.width - width
             }
+            
+            /// 适配image
+            if let imageInfos = self.title_imageInfos, imageInfos.count > 0 {
+                target_x -= (self.style.image_view_width + self.style.image_right_margin) / 2
+            }
             content_view.setContentOffset(CGPoint(x: target_x, y: 0), animated: true)
         } else {
             content_view.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -219,10 +264,17 @@ class JYPageTitleView: UIView {
     /// 更新flagView的位置
     private func updateFlagViewFrame() {
         UIView.animate(withDuration: 0.25) {
-            self.flag_view.frame = CGRect(x: self.current_title_view.frame.origin.x,
-                                          y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
-                                          width: self.current_title_view.frame.size.width,
-                                          height: self.style.flag_view_height)
+            if let imageInfos = self.title_imageInfos, imageInfos.count > 0, imageInfos.count == self.titles.count {
+                self.flag_view.frame = CGRect(x: self.current_title_view.frame.origin.x - self.style.image_view_width - self.style.image_right_margin,
+                                              y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
+                                              width: self.current_title_view.frame.size.width + self.style.image_view_width + self.style.image_right_margin,
+                                              height: self.style.flag_view_height)
+            }  else {
+                self.flag_view.frame = CGRect(x: self.current_title_view.frame.origin.x,
+                                              y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
+                                              width: self.current_title_view.frame.size.width,
+                                              height: self.style.flag_view_height)
+            }
         }
     }
 }
@@ -230,16 +282,28 @@ class JYPageTitleView: UIView {
 //MARK: - 标题样式
 /// 标题样式
 class JYPageTitleViewStyle {
+    public var title_view_position = JYPageTitleViewPosition.top // 默认为顶部
+    public var image_view_height: CGFloat = 30.0 //
+    public var image_view_width: CGFloat = 30.0 //
     public var title_view_height: CGFloat = 44.0 //
     public var title_view_width: CGFloat = UIScreen.main.bounds.size.width
+    public var image_right_margin: CGFloat = 10.0
     public var item_margin: CGFloat = 10.0
-    public var font_size: CGFloat = 14.0
+    public var font_size: CGFloat = 15.0
     public var is_font_bold: Bool = false
     public var bottom_line_color = UIColor.groupTableViewBackground
     public var bottom_line_height: CGFloat = 0.5
-    public var default_color = UIColor.darkGray
+    public var default_color = UIColor(red: 150/255.0, green: 150/255.0, blue: 150/255.0, alpha: 1)
     public var selected_color = UIColor(red: 198.0/255.0, green: 1/255.0, blue: 31/255.0, alpha: 1)
     public var background_color = UIColor.groupTableViewBackground
     public var is_hidden_when_only_one_item = false
-    public var flag_view_height: CGFloat = 2.0 // 标识View的高度
+    public var flag_view_height: CGFloat = 3.0 // 标识View的高度
+}
+
+
+//MARK: - 标题样式
+/// 标题位置
+enum JYPageTitleViewPosition {
+    case top
+    case bottom
 }

@@ -97,13 +97,15 @@ extension JYPageContentView: UICollectionViewDataSource, UICollectionViewDelegat
         }
         let controller = child_controllers[indexPath.item]
         cell.addSubview(controller.view)
-        cell.contentView.translatesAutoresizingMaskIntoConstraints = false
         cell.addConstraints([
-            NSLayoutConstraint(item: controller.view, attribute: .left, relatedBy: .equal, toItem: cell, attribute: .left, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: controller.view, attribute: .right, relatedBy: .equal, toItem: cell, attribute: .right, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: controller.view, attribute: .top, relatedBy: .equal, toItem: cell, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: controller.view, attribute: .bottom, relatedBy: .equal, toItem: cell, attribute: .bottom, multiplier: 1, constant: 0)
-            ])
+            NSLayoutConstraint(item: controller.view!, attribute: .left, relatedBy: .equal, toItem: cell, attribute: .left, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: controller.view!, attribute: .right, relatedBy: .equal, toItem: cell, attribute: .right, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: controller.view!, attribute: .top, relatedBy: .equal, toItem: cell, attribute: .top, multiplier: 1, constant: 0),
+//            NSLayoutConstraint(item: controller.view!, attribute: .bottom, relatedBy: .equal, toItem: cell, attribute: .bottom, multiplier: 1, constant: 0)
+        ])
+        //        controller.view.snp.makeConstraints { (make) in
+        //            make.left.right.top.bottom.equalTo(cell).offset(0)
+        //        }
         return cell
     }
     

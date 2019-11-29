@@ -36,6 +36,17 @@ class ViewController: UIViewController {
             "测试分类0000000000000000000000000000008"
         ]
         
+        let imageInfos = [
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3699703635,816718470&fm=26&gp=0.jpg",
+            "imageName1"
+        ]
+        
         var childs = [UIViewController]()
         for _ in 0..<titles.count {
             let child = UIViewController()
@@ -47,11 +58,15 @@ class ViewController: UIViewController {
         let rect = CGRect(x: view.frame.origin.x,
                           y: top_height,
                           width: UIScreen.main.bounds.size.width,
-                          height: UIScreen.main.bounds.size.height - top_height)
+                          height: UIScreen.main.bounds.size.height - top_height - 50)
         let style = JYPageTitleViewStyle()
+        style.item_margin = 50
+        style.title_view_position = .bottom
+        style.image_view_height = 40
+        style.image_view_width = 40
         style.is_hidden_when_only_one_item = true
         
-        pageView = JYPageView(rect, style: style, titles: titles, parent: self, childs: childs)
+        pageView = JYPageView(rect, style: style, titles: titles, imageInfos: imageInfos, parent: self, childs: childs)
         pageView.delegate = self
         view.addSubview(pageView)
     }
@@ -73,8 +88,7 @@ class ViewController: UIViewController {
             child.view.backgroundColor = UIColor.randomColor()
             childs.append(child)
         }
-        
-        pageView.reload(with: titles, childs: childs)
+        pageView.reload(with: titles, imageInfos: nil, childs: childs)
     }
 }
 

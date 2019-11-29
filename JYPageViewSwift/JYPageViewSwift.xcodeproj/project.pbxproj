@@ -74,9 +74,9 @@
 		270727D721E3432B00CC6CDF /* JYPageView */ = {
 			isa = PBXGroup;
 			children = (
+				270727DA21E3432B00CC6CDF /* JYPageContentView.swift */,
 				270727D821E3432B00CC6CDF /* JYPageTitleView.swift */,
 				270727D921E3432B00CC6CDF /* JYPageView.swift */,
-				270727DA21E3432B00CC6CDF /* JYPageContentView.swift */,
 			);
 			path = JYPageView;
 			sourceTree = "<group>";
@@ -113,6 +113,7 @@
 				TargetAttributes = {
 					270727C121E3430600CC6CDF = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1120;
 					};
 				};
 			};
@@ -312,7 +313,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bm.hb.JYPageViewSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -331,7 +332,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bm.hb.JYPageViewSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

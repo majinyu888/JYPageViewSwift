@@ -28,6 +28,7 @@ class JYPageView: UIView {
     
     //MARK: - private models
     fileprivate var titles = [String]()
+    fileprivate var imageInfos: [String]? = [String]()
     fileprivate weak var parent: UIViewController!
     fileprivate var childs = [UIViewController]()
     
@@ -39,19 +40,40 @@ class JYPageView: UIView {
     
     //MARK: - init
     
-    convenience init(_ frame: CGRect, style: JYPageTitleViewStyle?, titles: [String], parent: UIViewController, childs: [UIViewController]) {
+    convenience init(_ frame: CGRect, style: JYPageTitleViewStyle?, titles: [String], imageInfos: [String]?, parent: UIViewController, childs: [UIViewController]) {
         self.init(frame: frame)
         backgroundColor = UIColor.white
         self.titles = titles
+        self.imageInfos = imageInfos
         self.childs = childs
         self.parent = parent
         self.style = style == nil ? JYPageTitleViewStyle() : style!
-        self.title_view = JYPageTitleView(self.titles, style: self.style)
-        let rect = CGRect(x: 0,
-                          y: self.style.title_view_height,
-                          width: self.style.title_view_width,
-                          height: self.bounds.size.height - self.style.title_view_height)
-        content_view = JYPageContentView(rect, parent: self.parent, childs: self.childs)
+        self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, style: self.style)
+        
+        var rect_title = CGRect.zero
+        var rect_content = CGRect.zero
+        if self.style!.title_view_position == .top {
+            rect_title = CGRect(x: 0,
+                                y: 0,
+                                width: self.style.title_view_width,
+                                height: self.style.title_view_height)
+            rect_content = CGRect(x: 0,
+                                  y: self.style.title_view_height,
+                                  width: self.style.title_view_width,
+                                  height: self.bounds.size.height - self.style.title_view_height)
+        } else {
+            rect_title = CGRect(x: 0,
+                                y: self.bounds.size.height - self.style.title_view_height,
+                                width: self.style.title_view_width,
+                                height: self.style.title_view_height)
+            rect_content = CGRect(x: 0,
+                                  y: 0,
+                                  width: self.style.title_view_width,
+                                  height: self.bounds.size.height - self.style.title_view_height)
+        }
+        title_view.frame = rect_title
+        content_view = JYPageContentView(rect_content, parent: self.parent, childs: self.childs)
+        
         title_view.delegate = self
         content_view.delegate = self
         addSubview(title_view)
@@ -60,7 +82,7 @@ class JYPageView: UIView {
     //MARK: - private functions
     
     //MARK: - public functions
-    public func reload(with titles: [String], childs: [UIViewController]) {
+    public func reload(with titles: [String], imageInfos: [String]?, childs: [UIViewController]) {
         /// 1.清空
         /// 2.恢复默认值
         /// 3.重新添加
@@ -80,12 +102,31 @@ class JYPageView: UIView {
                 
                 self.titles = titles
                 self.childs = childs
-                self.title_view = JYPageTitleView.init(titles, style: self.style)
-                let rect = CGRect(x: 0,
-                                  y: self.style.title_view_height,
-                                  width: self.style.title_view_width,
-                                  height: self.bounds.size.height - self.style.title_view_height)
-                self.content_view = JYPageContentView(rect, parent: self.parent, childs: self.childs)
+                self.title_view = JYPageTitleView(self.titles, imageInfos: self.imageInfos, style: self.style)
+                
+                var rect_title = CGRect.zero
+                var rect_content = CGRect.zero
+                if self.style!.title_view_position == .top {
+                    rect_title = CGRect(x: 0,
+                                        y: 0,
+                                        width: self.style.title_view_width,
+                                        height: self.style.title_view_height)
+                    rect_content = CGRect(x: 0,
+                                          y: self.style.title_view_height,
+                                          width: self.style.title_view_width,
+                                          height: self.bounds.size.height - self.style.title_view_height)
+                } else {
+                    rect_title = CGRect(x: 0,
+                                        y: self.bounds.size.height - self.style.title_view_height,
+                                        width: self.style.title_view_width,
+                                        height: self.style.title_view_height)
+                    rect_content = CGRect(x: 0,
+                                          y: 0,
+                                          width: self.style.title_view_width,
+                                          height: self.bounds.size.height - self.style.title_view_height)
+                }
+                self.title_view.frame = rect_title
+                self.content_view = JYPageContentView(rect_content, parent: self.parent, childs: self.childs)
                 
                 self.addSubview(self.title_view)
                 self.addSubview(self.content_view)
