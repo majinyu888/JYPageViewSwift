@@ -71,7 +71,7 @@ class ViewController: UIViewController {
                           width: UIScreen.main.bounds.size.width,
                           height: UIScreen.main.bounds.size.height - top_height - 50)
         let style = JYPageTitleViewStyle()
-        style.left_and_right_margin = 50;
+        style.left_and_right_margin = 10;
         style.item_margin = 10
         style.title_view_position = .bottom
         style.image_view_height = 40
@@ -88,8 +88,8 @@ class ViewController: UIViewController {
     @objc func reloadJYPageView() {
         
         let titles = [
-            "测试分类01",
-            "测试分类01",
+            "测0112321321321",
+            "测01123123232121",
         ]
         
         let imageInfos = [

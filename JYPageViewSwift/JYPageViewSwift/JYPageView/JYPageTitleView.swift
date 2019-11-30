@@ -161,7 +161,7 @@ class JYPageTitleView: UIView {
                 
                 image_views.append(imageView)
                 content_view.addSubview(imageView)
-                offset_x += self.style.image_view_width + self.style.item_margin
+                offset_x += self.style.image_view_width + self.style.image_right_margin
             }
             
             
@@ -211,6 +211,13 @@ class JYPageTitleView: UIView {
                     self.title_views[i].frame = frame
                 }
             }
+        }
+        
+        
+        /// 居中显示
+        if self.style.is_center_conetnt_when_widthSmall && !self.style.is_resize_items_width && maxX < self.style.title_view_width {
+            let offsetX = (self.style.title_view_width - maxX) / 2
+            content_view.contentInset = UIEdgeInsets(top: 0, left: offsetX, bottom: 0, right: 0)
         }
         
         /// flagView Default
@@ -374,7 +381,8 @@ class JYPageTitleView: UIView {
 /// 标题样式
 class JYPageTitleViewStyle {
     public var title_view_position = JYPageTitleViewPosition.top // 默认为顶部
-    public var is_resize_items_width = false // 默认为顶部
+    public var is_resize_items_width = false // 默认不拉伸label
+    public var is_center_conetnt_when_widthSmall = true // 是否让内容居中 - 当切晋档
     public var left_and_right_margin: CGFloat = 0 // 内容居左和居右的巨鹿
     public var image_view_height: CGFloat = 30.0 //
     public var image_view_width: CGFloat = 30.0 //
