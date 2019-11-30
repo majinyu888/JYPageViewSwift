@@ -71,7 +71,7 @@ class ViewController: UIViewController {
                           width: UIScreen.main.bounds.size.width,
                           height: UIScreen.main.bounds.size.height - top_height - 50)
         let style = JYPageTitleViewStyle()
-        style.item_margin = 50
+        style.item_margin = 10
         style.title_view_position = .bottom
         style.image_view_height = 40
         style.image_view_width = 40
@@ -89,22 +89,16 @@ class ViewController: UIViewController {
         let titles = [
             "测试分类01",
             "测试分类01",
-            "测试分类01",
-            "测试分类01"
         ]
         
         let imageInfos = [
             "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
             "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
-            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg",
-            "https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=552789bf59df8db1b82e7b663923dddb/c2cec3fdfc039245dfcf69288094a4c27d1e259a.jpg"
         ]
         
         let imageSelectedInfos = [
-            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
-            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
-            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg",
-            "https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=99cdc077f6faaf5180e386bdbc5594ed/7e3e6709c93d70cf6c11c25cf3dcd100bba12bf3.jpg"
+            "001",
+            "002",
         ]
         var childs = [UIViewController]()
         

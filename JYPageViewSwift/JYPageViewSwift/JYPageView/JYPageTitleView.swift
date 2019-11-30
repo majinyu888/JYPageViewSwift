@@ -117,33 +117,53 @@ class JYPageTitleView: UIView {
             title_width = title_rect.size.width
             
             /// --- 图片
-            if let imageInfos = self.title_imageInfos, imageInfos.count > 0, imageInfos.count == titles.count {
+            if let imageInfos = title_imageInfos, let imageSelectedInfos = title_selected_imageInfos, imageInfos.count > 0, imageSelectedInfos.count > 0, imageInfos.count == imageSelectedInfos.count {
                 let imageName = imageInfos[i]
+                let imageNameSelected = imageSelectedInfos[i]
                 let imageView = UIImageView(frame: .zero)
                 imageView.isUserInteractionEnabled = true
                 imageView.tag = i
                 imageView.frame = CGRect(x: offset_x, y: (self.style.title_view_height - self.style.image_view_height) / 2, width: self.style.image_view_width, height: self.style.image_view_height)
                 /// 添加手势
                 imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.titleTaped(_:))))
-                if imageName.hasPrefix("http") {
-                    /// 网络图片
-                    if let url = URL(string: imageName) {
-                        DispatchQueue.main.async {
-                            if let data = try? Data(contentsOf: url) {
-                                imageView.image = UIImage(data: data)
+                
+                if i == 0 {
+                    /// 默认为第一个选中...
+                    if imageNameSelected.hasPrefix("http") {
+                        /// 网络图片
+                        if let url = URL(string: imageNameSelected) {
+                            DispatchQueue.main.async {
+                                if let data = try? Data(contentsOf: url) {
+                                    imageView.image = UIImage(data: data)
+                                }
                             }
                         }
+                    } else {
+                        /// 默认为本地图片
+                        imageView.image = UIImage(named: imageNameSelected)
                     }
                 } else {
-                    /// 默认为本地图片
-                    imageView.image = UIImage(named: imageName)
+                    /// 不是第一个
+                    if imageName.hasPrefix("http") {
+                        /// 网络图片
+                        if let url = URL(string: imageName) {
+                            DispatchQueue.main.async {
+                                if let data = try? Data(contentsOf: url) {
+                                    imageView.image = UIImage(data: data)
+                                }
+                            }
+                        }
+                    } else {
+                        /// 默认为本地图片
+                        imageView.image = UIImage(named: imageName)
+                    }
                 }
+                
                 image_views.append(imageView)
                 content_view.addSubview(imageView)
                 offset_x += self.style.image_view_width + self.style.image_right_margin
             }
-            /// 默认为0
-            updateImageViewWithTargetIndex(0)
+            
             
             /// --- label
             label.frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
@@ -159,17 +179,37 @@ class JYPageTitleView: UIView {
         if maxX < self.style.title_view_width {
             /// 说明没有到一屏幕宽, 则按照屏幕等分
             var offset_x: CGFloat = 0.0
-            let title_width: CGFloat = (self.style.title_view_width - CGFloat(self.titles.count) * self.style.item_margin ) / CGFloat(self.titles.count)
-            /// 重新计算,X 和 宽度
-            for i in 0..<self.titles.count {
-                if i == 0 {
-                    offset_x = self.style.item_margin / 2
-                } else {
-                    offset_x = self.style.item_margin / 2 + (title_width + self.style.item_margin) * CGFloat(i)
+            var title_width: CGFloat = 0
+            
+            if let imageInfos = title_imageInfos, let imageSelectedInfos = title_selected_imageInfos, imageInfos.count > 0, imageSelectedInfos.count > 0, imageInfos.count == imageSelectedInfos.count {
+                /// 多了图片
+                title_width = (self.style.title_view_width - CGFloat(self.titles.count) * self.style.item_margin  - CGFloat(imageInfos.count) * (self.style.image_view_width + self.style.image_right_margin)) / CGFloat(self.titles.count)
+                /// 重新计算,X 和 宽度
+                for i in 0..<self.titles.count {
+                    if i == 0 {
+                        offset_x = self.style.item_margin / 2
+                    } else {
+                        offset_x = self.style.item_margin / 2 + (title_width + self.style.item_margin + self.style.image_view_width + self.style.image_right_margin) * CGFloat(i)
+                    }
+                    let frame_image = CGRect(x: offset_x, y: (self.style.title_view_height - self.style.image_view_height) / 2, width: self.style.image_view_width, height: self.style.image_view_height)
+                    self.image_views[i].frame = frame_image
+                    
+                    let frame_label = CGRect(x: frame_image.maxX + self.style.item_margin, y: 0, width: title_width, height: self.style.title_view_height)
+                    self.title_views[i].frame = frame_label
                 }
-                let frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
-                self.title_views[i].frame = frame
-                self.content_view.subviews[i].frame = frame
+            } else {
+                /// 只有文字
+                title_width = (self.style.title_view_width - CGFloat(self.titles.count) * self.style.item_margin ) / CGFloat(self.titles.count)
+                /// 重新计算,X 和 宽度
+                for i in 0..<self.titles.count {
+                    if i == 0 {
+                        offset_x = self.style.item_margin / 2
+                    } else {
+                        offset_x = self.style.item_margin / 2 + (title_width + self.style.item_margin) * CGFloat(i)
+                    }
+                    let frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
+                    self.title_views[i].frame = frame
+                }
             }
         }
         
@@ -257,11 +297,6 @@ class JYPageTitleView: UIView {
             if target_x + width > content_size.width {
                 target_x = content_size.width - width
             }
-            
-            /// 适配image
-            if let imageInfos = self.title_imageInfos, imageInfos.count > 0 {
-                target_x -= (self.style.image_view_width + self.style.image_right_margin) / 2
-            }
             content_view.setContentOffset(CGPoint(x: target_x, y: 0), animated: true)
         } else {
             content_view.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -290,12 +325,15 @@ class JYPageTitleView: UIView {
     private func updateImageViewWithTargetIndex(_ index: Int) {
         if let imageInfos = title_imageInfos, let imageSelectedInfos = title_selected_imageInfos, imageInfos.count > 0, imageSelectedInfos.count > 0, imageInfos.count == imageSelectedInfos.count {
             
+            if current_index == index {
+                return
+            }
+            
             let imageView_current = image_views[current_index]
             let imageName_current = imageInfos[current_index]
             
             let imageView_target = image_views[index]
             let imageName_target = imageSelectedInfos[index]
-            
             
             if imageName_current.hasPrefix("http") {
                 /// 网络图片
@@ -310,7 +348,6 @@ class JYPageTitleView: UIView {
                 /// 默认为本地图片
                 imageView_current.image = UIImage(named: imageName_current)
             }
-            
             
             if imageName_target.hasPrefix("http") {
                 /// 网络图片
