@@ -176,7 +176,7 @@ class JYPageTitleView: UIView {
         /// 最后一个 -> + 右边距/2
         let maxX = (title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin / 2 + self.style.left_and_right_margin
         
-        if maxX < self.style.title_view_width {
+        if self.style.is_resize_items_width && maxX < self.style.title_view_width {
             /// 说明没有到一屏幕宽, 则按照屏幕等分
             var offset_x: CGFloat = 0.0
             var title_width: CGFloat = 0
@@ -270,8 +270,12 @@ class JYPageTitleView: UIView {
         
         current_index = targetIndex
         
-        // 让选中的标题位于中间
-        updateSelectedTitleContentOffset()
+        /// 最后一个 -> + 右边距/2
+        let maxX = (title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin / 2 + self.style.left_and_right_margin
+        if !self.style.is_resize_items_width && maxX > self.style.title_view_width {
+            // 让选中的标题位于中间
+            updateSelectedTitleContentOffset()
+        }
         /// 更新标志视图的位置
         updateFlagViewFrame()
     }
@@ -370,6 +374,7 @@ class JYPageTitleView: UIView {
 /// 标题样式
 class JYPageTitleViewStyle {
     public var title_view_position = JYPageTitleViewPosition.top // 默认为顶部
+    public var is_resize_items_width = false // 默认为顶部
     public var left_and_right_margin: CGFloat = 0 // 内容居左和居右的巨鹿
     public var image_view_height: CGFloat = 30.0 //
     public var image_view_width: CGFloat = 30.0 //
