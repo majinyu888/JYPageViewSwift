@@ -71,6 +71,7 @@ class ViewController: UIViewController {
                           width: UIScreen.main.bounds.size.width,
                           height: UIScreen.main.bounds.size.height - top_height - 50)
         let style = JYPageTitleViewStyle()
+        style.left_and_right_margin = 50;
         style.item_margin = 10
         style.title_view_position = .bottom
         style.image_view_height = 40

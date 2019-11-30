@@ -87,7 +87,7 @@ class JYPageTitleView: UIView {
         
         for i in 0..<self.titles.count {
             
-            var offset_x: CGFloat = 0.0
+            var offset_x: CGFloat = self.style.left_and_right_margin
             var title_width: CGFloat = 0.0
             
             let label = UILabel()
@@ -106,7 +106,7 @@ class JYPageTitleView: UIView {
                 label.textColor = self.style.default_color
             }
             if i == 0 {
-                offset_x = self.style.item_margin / 2
+                offset_x = self.style.item_margin / 2 + self.style.left_and_right_margin
             } else {
                 offset_x = (self.title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin
             }
@@ -161,7 +161,7 @@ class JYPageTitleView: UIView {
                 
                 image_views.append(imageView)
                 content_view.addSubview(imageView)
-                offset_x += self.style.image_view_width + self.style.image_right_margin
+                offset_x += self.style.image_view_width + self.style.item_margin
             }
             
             
@@ -174,7 +174,7 @@ class JYPageTitleView: UIView {
         }
         
         /// 最后一个 -> + 右边距/2
-        let maxX = (title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin / 2
+        let maxX = (title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin / 2 + self.style.left_and_right_margin
         
         if maxX < self.style.title_view_width {
             /// 说明没有到一屏幕宽, 则按照屏幕等分
@@ -183,13 +183,13 @@ class JYPageTitleView: UIView {
             
             if let imageInfos = title_imageInfos, let imageSelectedInfos = title_selected_imageInfos, imageInfos.count > 0, imageSelectedInfos.count > 0, imageInfos.count == imageSelectedInfos.count {
                 /// 多了图片
-                title_width = (self.style.title_view_width - CGFloat(self.titles.count) * self.style.item_margin  - CGFloat(imageInfos.count) * (self.style.image_view_width + self.style.image_right_margin)) / CGFloat(self.titles.count)
+                title_width = (self.style.title_view_width - 2 * self.style.left_and_right_margin - CGFloat(self.titles.count) * self.style.item_margin  - CGFloat(imageInfos.count) * (self.style.image_view_width + self.style.image_right_margin)) / CGFloat(self.titles.count)
                 /// 重新计算,X 和 宽度
                 for i in 0..<self.titles.count {
                     if i == 0 {
-                        offset_x = self.style.item_margin / 2
+                        offset_x = self.style.item_margin / 2 + self.style.left_and_right_margin
                     } else {
-                        offset_x = self.style.item_margin / 2 + (title_width + self.style.item_margin + self.style.image_view_width + self.style.image_right_margin) * CGFloat(i)
+                        offset_x = self.style.left_and_right_margin + self.style.item_margin / 2 + (title_width + self.style.item_margin + self.style.image_view_width + self.style.image_right_margin) * CGFloat(i)
                     }
                     let frame_image = CGRect(x: offset_x, y: (self.style.title_view_height - self.style.image_view_height) / 2, width: self.style.image_view_width, height: self.style.image_view_height)
                     self.image_views[i].frame = frame_image
@@ -199,13 +199,13 @@ class JYPageTitleView: UIView {
                 }
             } else {
                 /// 只有文字
-                title_width = (self.style.title_view_width - CGFloat(self.titles.count) * self.style.item_margin ) / CGFloat(self.titles.count)
+                title_width = (self.style.title_view_width  - 2 * self.style.left_and_right_margin - CGFloat(self.titles.count) * self.style.item_margin ) / CGFloat(self.titles.count)
                 /// 重新计算,X 和 宽度
                 for i in 0..<self.titles.count {
                     if i == 0 {
-                        offset_x = self.style.item_margin / 2
+                        offset_x = self.style.item_margin / 2 + self.style.left_and_right_margin
                     } else {
-                        offset_x = self.style.item_margin / 2 + (title_width + self.style.item_margin) * CGFloat(i)
+                        offset_x = self.style.left_and_right_margin + self.style.item_margin / 2 + (title_width + self.style.item_margin) * CGFloat(i)
                     }
                     let frame = CGRect(x: offset_x, y: 0, width: title_width, height: self.style.title_view_height)
                     self.title_views[i].frame = frame
@@ -230,7 +230,7 @@ class JYPageTitleView: UIView {
         content_view.addSubview(flag_view)
         
         /// 最后一个titleLabel的最大 X + 0.5倍边距
-        content_view.contentSize = CGSize(width: (self.title_views.last?.frame.maxX ?? 0) + self.style.item_margin / 2, height: 0)
+        content_view.contentSize = CGSize(width: (self.title_views.last?.frame.maxX ?? 0) + self.style.item_margin / 2 + self.style.left_and_right_margin, height: 0)
         
         /// lineView
         line_view.frame = CGRect(x: 0,
@@ -370,6 +370,7 @@ class JYPageTitleView: UIView {
 /// 标题样式
 class JYPageTitleViewStyle {
     public var title_view_position = JYPageTitleViewPosition.top // 默认为顶部
+    public var left_and_right_margin: CGFloat = 0 // 内容居左和居右的巨鹿
     public var image_view_height: CGFloat = 30.0 //
     public var image_view_width: CGFloat = 30.0 //
     public var title_view_height: CGFloat = 44.0 //
