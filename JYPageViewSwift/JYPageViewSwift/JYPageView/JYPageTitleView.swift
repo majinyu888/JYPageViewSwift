@@ -69,6 +69,7 @@ class JYPageTitleView: UIView {
                             y: 0.0,
                             width: self.style!.title_view_width,
                             height: self.style.title_view_height)
+        self.backgroundColor = self.style.background_color
         
         self.title_imageInfos = imageInfos
         self.title_selected_imageInfos = imageSelectedInfos
@@ -94,11 +95,7 @@ class JYPageTitleView: UIView {
             label.isUserInteractionEnabled = true
             label.tag = i
             label.textAlignment = .center
-            if self.style.is_font_bold {
-                label.font = UIFont.boldSystemFont(ofSize: self.style.font_size)
-            } else {
-                label.font = UIFont.systemFont(ofSize: self.style.font_size)
-            }
+            label.font = UIFont.systemFont(ofSize: self.style.font_size)
             label.text = self.titles[i]
             if i == self.current_index {
                 label.textColor = self.style.selected_color
@@ -112,7 +109,7 @@ class JYPageTitleView: UIView {
             }
             let title_rect = (label.text! as NSString).boundingRect(with: CGSize(width: Double(MAXFLOAT), height: 0.0),
                                                                     options: NSStringDrawingOptions.usesFontLeading,
-                                                                    attributes: [NSAttributedString.Key.font: label.font ?? UIFont.systemFont(ofSize: 15)],
+                                                                    attributes: [NSAttributedString.Key.font: label.font ?? UIFont.systemFont(ofSize: self.style.font_size)],
                                                                     context: nil)
             title_width = title_rect.size.width
             
@@ -173,6 +170,8 @@ class JYPageTitleView: UIView {
             content_view.addSubview(label)
         }
         
+        
+        
         /// 最后一个 -> + 右边距/2
         let maxX = (title_views.last?.frame ?? CGRect.zero).maxX + self.style.item_margin / 2 + self.style.left_and_right_margin
         
@@ -221,7 +220,11 @@ class JYPageTitleView: UIView {
         }
         
         /// flagView Default
-        flag_view.backgroundColor = self.style.selected_color
+        if let cc = self.style.flag_view_color {
+            flag_view.backgroundColor = cc
+        } else {
+            flag_view.backgroundColor = self.style.selected_color
+        }
         if let imageInfos = self.title_imageInfos, imageInfos.count > 0, imageInfos.count == titles.count {
             flag_view.frame = CGRect(x: current_title_view.frame.origin.x - self.style.image_view_width - self.style.image_right_margin,
                                      y: self.style.title_view_height - self.style.flag_view_height - self.style.bottom_line_height,
@@ -272,6 +275,10 @@ class JYPageTitleView: UIView {
         let target_label = title_views[targetIndex] as! UILabel
         source_lable.textColor = style.default_color
         target_label.textColor = style.selected_color
+        if self.style.big_font_style {
+            source_lable.font = UIFont.systemFont(ofSize: self.style.font_size)
+            target_label.font = UIFont.boldSystemFont(ofSize: self.style.font_size)
+        }
         
         updateImageViewWithTargetIndex(targetIndex)
         
@@ -390,15 +397,17 @@ class JYPageTitleViewStyle {
     public var title_view_width: CGFloat = UIScreen.main.bounds.size.width
     public var image_right_margin: CGFloat = 10.0
     public var item_margin: CGFloat = 10.0
-    public var font_size: CGFloat = 15.0
-    public var is_font_bold: Bool = false
+    public var font_size: CGFloat = 16.0
     public var bottom_line_color = UIColor.groupTableViewBackground
     public var bottom_line_height: CGFloat = 0.5
     public var default_color = UIColor(red: 150/255.0, green: 150/255.0, blue: 150/255.0, alpha: 1)
     public var selected_color = UIColor(red: 198.0/255.0, green: 1/255.0, blue: 31/255.0, alpha: 1)
-    public var background_color = UIColor.groupTableViewBackground
+    public var background_color = UIColor.white
     public var is_hidden_when_only_one_item = false
     public var flag_view_height: CGFloat = 3.0 // 标识View的高度
+    public var flag_view_color: UIColor? = nil
+    public var big_font_style: Bool = false
+    
 }
 
 

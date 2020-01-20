@@ -30,7 +30,7 @@ class JYPageView: UIView {
     fileprivate var titles = [String]()
     fileprivate var imageInfos: [String]? = [String]()
     fileprivate var imageSelectedInfos: [String]? = [String]()
-    
+
     fileprivate weak var parent: UIViewController!
     fileprivate var childs = [UIViewController]()
     
